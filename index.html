@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUST NET Quiz</title>
+<style>
+:root{--navy:#0b3d6b;--blue:#1565c0;--bg:#f3f6fa;--card:#fff;--line:#d5dce6;--text:#1a1d24;--mute:#5b6472;
+--green:#1b8a3a;--greenbg:#e2f6e7;--red:#c62828;--redbg:#fde7e7;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI","Cambria Math","Segoe UI Symbol",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.5}
+header{background:var(--navy);color:#fff;padding:12px 18px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:5}
+header h1{font-size:18px;margin:0;flex:1;font-weight:700}
+header button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:6px 12px;font-size:14px;cursor:pointer}
+header button:hover{background:rgba(255,255,255,.28)}
+main{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+h2{color:var(--navy);font-size:20px;margin:22px 0 8px}
+.sub{color:var(--mute);font-size:14px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.mock h3{margin:0 0 4px;color:var(--navy);font-size:17px}
+.mock .best{font-size:13px;color:var(--mute);min-height:20px}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+button.b{background:var(--blue);color:#fff;border:0;border-radius:6px;padding:8px 12px;font-size:14px;cursor:pointer;font-family:inherit}
+button.b:hover{background:#0d4fa0}
+button.b.alt{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+button.b.alt:hover{background:#eaf2fd}
+button.b:disabled{background:#b8c1cd;cursor:not-allowed}
+.tabs{display:flex;gap:6px;margin:8px 0}
+.tabs button{flex:1;padding:9px;border:1px solid var(--line);background:#fff;border-radius:6px;font-size:15px;cursor:pointer;font-family:inherit}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.topic{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #edf0f4}
+.topic:last-child{border-bottom:0}
+.topic .n{flex:1}.topic .c{color:var(--mute);font-size:13px;white-space:nowrap}
+.bar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:14px;color:var(--mute);margin-bottom:8px}
+.bar b{color:var(--text)}
+.bar .ok{color:var(--green);font-weight:700}.bar .no{color:var(--red);font-weight:700}
+.prog{height:6px;background:#dfe5ee;border-radius:3px;overflow:hidden;margin-bottom:12px}
+.prog div{height:100%;background:var(--blue);width:0;transition:width .2s}
+.tag{display:inline-block;background:#e6eef7;color:var(--navy);font-size:12px;font-weight:600;border-radius:4px;padding:2px 8px;margin-right:6px}
+.passage{background:#f6f8fb;border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:6px;padding:10px 12px;margin:10px 0;font-size:15px}
+.qtext{font-size:18px;margin:12px 0 14px;white-space:pre-wrap}
+.opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:8px;padding:11px 12px;margin:8px 0;font-size:16px;cursor:pointer;font-family:inherit;color:var(--text)}
+.opt:hover:not(:disabled){border-color:var(--blue);background:#f2f7fe}
+.opt .l{flex:none;width:28px;height:28px;border-radius:50%;background:#e6eef7;color:var(--navy);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.opt .m{margin-left:auto;font-weight:700;white-space:nowrap}
+.opt:disabled{cursor:default;opacity:1}
+.opt.right{border-color:var(--green);background:var(--greenbg)}
+.opt.right .l{background:var(--green);color:#fff}.opt.right .m{color:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--redbg)}
+.opt.wrong .l{background:var(--red);color:#fff}.opt.wrong .m{color:var(--red)}
+.exp{border-radius:8px;padding:10px 12px;margin-top:12px;font-size:15px;border:1px solid}
+.exp.ok{background:var(--greenbg);border-color:#9bd0a8}.exp.no{background:var(--redbg);border-color:#efb0b0}
+.exp b.h{display:block;margin-bottom:2px}
+.exp.ok b.h{color:var(--green)}.exp.no b.h{color:var(--red)}
+.nav{display:flex;gap:8px;justify-content:space-between;margin-top:14px}
+.nav button{font-size:16px;padding:10px 22px}
+.score{font-size:44px;font-weight:800;color:var(--navy);line-height:1.1}
+table{border-collapse:collapse;width:100%;font-size:14px;margin-top:6px}
+th,td{border-bottom:1px solid #e6eaf0;padding:6px 8px;text-align:left}
+th{color:var(--navy)}
+td.num{text-align:right;white-space:nowrap}
+.rev{border-left:4px solid var(--red);padding:6px 0 6px 12px;margin:12px 0;font-size:15px}
+.rev.skip{border-color:#9aa5b4}
+.rev .y{color:var(--red)}.rev .c{color:var(--green);font-weight:600}
+.note{font-size:13px;color:var(--mute);margin-top:22px}
+.hide{display:none}
+kbd{background:#eef1f5;border:1px solid #cfd6df;border-radius:4px;padding:0 5px;font-size:12px}
+</style>
+</head>
+<body>
+<header><h1 id="title">NUST NET Quiz</h1><button id="homeBtn" class="hide">Home</button></header>
+<main id="app"></main>
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var Q = window.QUESTIONS || [];
+var app = document.getElementById("app"), titleEl = document.getElementById("title"), homeBtn = document.getElementById("homeBtn");
+var SUBJ = ["Mathematics","Physics","English"];
+var S = null;            // current session
+var timerId = null;
+var LS = "nustnet.";
+
+function el(tag, attrs, kids){
+  var e = document.createElement(tag);
+  if (attrs) for (var k in attrs){
+    if (k === "class") e.className = attrs[k];
+    else if (k === "text") e.textContent = attrs[k];
+    else if (k.slice(0,2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(function(c){ if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+  return e;
+}
+function store(k, v){ try { localStorage.setItem(LS + k, JSON.stringify(v)); } catch(e){} }
+function load(k){ try { return JSON.parse(localStorage.getItem(LS + k)); } catch(e){ return null; } }
+function drop(k){ try { localStorage.removeItem(LS + k); } catch(e){} }
+function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function fmt(sec){ sec = Math.max(0, Math.floor(sec)); var h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return (h ? h + ":" : "") + (h && m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s; }
+function byId(){ var m = {}; Q.forEach(function(q, i){ m[q.id] = i; }); return m; }
+var IDX = byId();
+
+/* ---------- Home ---------- */
+function home(){
+  stopTimer(); S = null; titleEl.textContent = "NUST NET Quiz"; homeBtn.className = "hide"; app.innerHTML = "";
+  if (!Q.length){ app.appendChild(el("div", {class:"card", text:"Question data did not load. Keep data.js in the same folder as this page."})); return; }
+  var saved = load("session");
+  if (saved && saved.ids && saved.ids.length && saved.pos < saved.ids.length){
+    app.appendChild(el("div", {class:"card"}, [
+      el("b", {text:"Unfinished quiz: " + saved.title}),
+      el("div", {class:"sub", text:"Question " + (saved.pos + 1) + " of " + saved.ids.length}),
+      el("div", {class:"btns"}, [
+        el("button", {class:"b", text:"Continue", onclick:function(){ resume(saved); }}),
+        el("button", {class:"b alt", text:"Discard", onclick:function(){ drop("session"); home(); }})
+      ])
+    ]));
+  }
+  app.appendChild(el("h2", {text:"Full mock papers"}));
+  app.appendChild(el("p", {class:"sub", text:"Real pattern: 100 Mathematics + 60 Physics + 40 English, 180 minutes, no negative marking. You can also take one section at a time."}));
+  var g = el("div", {class:"grid"});
+  for (var k = 1; k <= 10; k++) (function(k){
+    var best = load("best.mock" + k);
+    var c = el("div", {class:"card mock"}, [
+      el("h3", {text:"Mock Paper " + k}),
+      el("div", {class:"best", text: best ? "Best full score: " + best.c + " / " + best.n : "Not attempted yet"}),
+      el("div", {class:"btns"}, [
+        el("button", {class:"b", text:"Full paper (200)", onclick:function(){ startMock(k, null); }}),
+        el("button", {class:"b alt", text:"Maths", onclick:function(){ startMock(k, "Mathematics"); }}),
+        el("button", {class:"b alt", text:"Physics", onclick:function(){ startMock(k, "Physics"); }}),
+        el("button", {class:"b alt", text:"English", onclick:function(){ startMock(k, "English"); }})
+      ])
+    ]);
+    g.appendChild(c);
+  })(k);
+  app.appendChild(g);
+
+  app.appendChild(el("h2", {text:"Practice by topic"}));
+  app.appendChild(el("p", {class:"sub", text:"Questions on one topic, taken from all ten mocks in random order."}));
+  var box = el("div", {class:"card"});
+  var tabs = el("div", {class:"tabs"}), list = el("div");
+  function show(subj){
+    Array.prototype.forEach.call(tabs.children, function(b){ b.className = b.textContent === subj ? "on" : ""; });
+    list.innerHTML = "";
+    var topics = [], count = {};
+    Q.forEach(function(q){ if (q.s === subj){ if (!count[q.t]){ count[q.t] = 0; topics.push(q.t); } count[q.t]++; } });
+    list.appendChild(el("div", {class:"topic"}, [
+      el("div", {class:"n"}, [el("b", {text:"Mixed " + subj})]),
+      el("button", {class:"b", text:"20 random", onclick:function(){ startTopic(subj, null, 20); }})
+    ]));
+    topics.forEach(function(t){
+      list.appendChild(el("div", {class:"topic"}, [
+        el("div", {class:"n", text:t}), el("div", {class:"c", text:count[t] + " Qs"}),
+        el("button", {class:"b alt", text:"10", onclick:function(){ startTopic(subj, t, 10); }}),
+        el("button", {class:"b alt", text:"All", onclick:function(){ startTopic(subj, t, 0); }})
+      ]));
+    });
+  }
+  SUBJ.forEach(function(s){ tabs.appendChild(el("button", {text:s, onclick:function(){ show(s); }})); });
+  box.appendChild(tabs); box.appendChild(list); app.appendChild(box); show("Mathematics");
+
+  app.appendChild(el("p", {class:"note", text:"All " + Q.length + " questions are original practice questions written in NET style. They are not real past-paper questions. Keyboard: A–D or 1–4 to answer, Enter for Next."}));
+}
+
+/* ---------- Start / resume ---------- */
+function startMock(k, subj){
+  var ids = Q.filter(function(q){ return q.m === k && (!subj || q.s === subj); }).map(function(q){ return q.id; });
+  begin({title:"Mock Paper " + k + (subj ? " · " + subj : " · Full paper"), ids:ids, limit:ids.length * 54, bestKey: subj ? null : "mock" + k});
+}
+function startTopic(subj, topic, n){
+  var pool = Q.filter(function(q){ return q.s === subj && (!topic || q.t === topic); });
+  if (subj === "English" && !topic) pool = pool.filter(function(q){ return !q.p; });
+  var ids;
+  if (topic === "Reading comprehension"){           // keep the questions of one passage together
+    var groups = {}, order = [];
+    pool.forEach(function(q){ if (!groups[q.p]){ groups[q.p] = []; order.push(q.p); } groups[q.p].push(q.id); });
+    ids = []; shuffle(order).forEach(function(p){ if (!n || ids.length < n) ids = ids.concat(groups[p]); });
+  } else {
+    ids = shuffle(pool).map(function(q){ return q.id; }); if (n) ids = ids.slice(0, n);
+  }
+  begin({title:(topic || "Mixed " + subj), ids:ids, limit:0, bestKey:null});
+}
+function begin(o){
+  S = {title:o.title, ids:o.ids, pos:0, ans:{}, limit:o.limit, used:0, bestKey:o.bestKey};
+  save(); run();
+}
+function resume(saved){ S = saved; run(); }
+function save(){ if (S) store("session", S); }
+function run(){
+  homeBtn.className = ""; titleEl.textContent = S.title;
+  stopTimer(); timerId = setInterval(tick, 1000);
+  render();
+}
+function stopTimer(){ if (timerId){ clearInterval(timerId); timerId = null; } }
+function tick(){
+  if (!S) return; S.used++;
+  var t = document.getElementById("timer"); if (t) t.textContent = timeText();
+  if (S.used % 10 === 0) save();
+  if (S.limit && S.used >= S.limit){ finish(true); }
+}
+function timeText(){ return S.limit ? "Time left " + fmt(S.limit - S.used) : "Time " + fmt(S.used); }
+function tally(){
+  var c = 0, w = 0; S.ids.forEach(function(id){ var a = S.ans[id]; if (a == null || a < 0) return; if (a === Q[IDX[id]].a) c++; else w++; });
+  return {c:c, w:w};
+}
+
+/* ---------- Question screen ---------- */
+function render(){
+  var id = S.ids[S.pos], q = Q[IDX[id]], given = S.ans[id], done = given != null;
+  var t = tally(); app.innerHTML = "";
+  app.appendChild(el("div", {class:"bar"}, [
+    el("span", {}, ["Question ", el("b", {text:(S.pos + 1) + " / " + S.ids.length})]),
+    el("span", {class:"ok", text:"✔ " + t.c}), el("span", {class:"no", text:"✘ " + t.w}),
+    el("span", {id:"timer", text:timeText()})
+  ]));
+  var pr = el("div", {class:"prog"}, [el("div")]); pr.firstChild.style.width = (100 * S.pos / S.ids.length) + "%"; app.appendChild(pr);
+  var card = el("div", {class:"card"});
+  card.appendChild(el("div", {}, [el("span", {class:"tag", text:q.s}), el("span", {class:"tag", text:q.t})]));
+  if (q.p) card.appendChild(el("div", {class:"passage", text:q.p}));
+  card.appendChild(el("div", {class:"qtext", text:q.q}));
+  q.o.forEach(function(o, i){
+    var cls = "opt", mark = "";
+    if (done){
+      if (i === q.a){ cls += " right"; mark = "✔ Correct"; }
+      else if (i === given){ cls += " wrong"; mark = "✘ Wrong"; }
+    }
+    var b = el("button", {class:cls, onclick:function(){ answer(i); }}, [
+      el("span", {class:"l", text:"ABCD"[i]}), el("span", {text:String(o)}), mark ? el("span", {class:"m", text:mark}) : null
+    ]);
+    if (done) b.disabled = true;
+    card.appendChild(b);
+  });
+  if (done){
+    var ok = given === q.a;
+    card.appendChild(el("div", {class:"exp " + (ok ? "ok" : "no")}, [
+      el("b", {class:"h", text: ok ? "Correct!" : (given < 0 ? "Skipped. Correct answer: " : "Wrong. Correct answer: ") + (ok ? "" : "ABCD"[q.a])}),
+      el("span", {text:q.e})
+    ]));
+  }
+  var last = S.pos === S.ids.length - 1;
+  card.appendChild(el("div", {class:"nav"}, [
+    el("button", {class:"b alt", text:"← Back", onclick:function(){ if (S.pos > 0){ S.pos--; save(); render(); } }}),
+    done ? el("button", {class:"b", id:"next", text: last ? "Finish" : "Next →", onclick:next})
+         : el("button", {class:"b alt", text:"Skip", onclick:function(){ answer(-1); }})
+  ]));
+  if (S.pos === 0) card.querySelector(".nav button").disabled = true;
+  app.appendChild(card);
+  app.appendChild(el("div", {class:"btns"}, [el("button", {class:"b alt", text:"Finish now and see result", onclick:function(){ finish(false); }})]));
+  window.scrollTo(0, 0);
+}
+function answer(i){
+  var id = S.ids[S.pos]; if (S.ans[id] != null) return;
+  S.ans[id] = i; save(); render();
+}
+function next(){
+  if (S.pos < S.ids.length - 1){ S.pos++; save(); render(); } else finish(false);
+}
+
+/* ---------- Result ---------- */
+function finish(timeUp){
+  stopTimer(); drop("session");
+  var rows = {}, order = [], c = 0, wrong = [];
+  S.ids.forEach(function(id){
+    var q = Q[IDX[id]], a = S.ans[id], key = q.s + " · " + q.t;
+    if (!rows[key]){ rows[key] = {c:0, n:0}; order.push(key); }
+    rows[key].n++;
+    if (a === q.a){ rows[key].c++; c++; } else wrong.push({q:q, a:a});
+  });
+  var n = S.ids.length;
+  if (S.bestKey){ var b = load("best." + S.bestKey); if (!b || c > b.c) store("best." + S.bestKey, {c:c, n:n}); }
+  var title = S.title, used = S.used;
+  app.innerHTML = ""; titleEl.textContent = "Result";
+  var head = el("div", {class:"card"}, [
+    timeUp ? el("div", {class:"exp no", text:"Time is up."}) : null,
+    el("div", {class:"sub", text:title}),
+    el("div", {class:"score", text:c + " / " + n}),
+    el("div", {class:"sub", text:Math.round(100 * c / n) + "% correct · time used " + fmt(used)})
+  ]);
+  var bySubj = {}; S.ids.forEach(function(id){ var q = Q[IDX[id]]; bySubj[q.s] = bySubj[q.s] || {c:0, n:0}; bySubj[q.s].n++; if (S.ans[id] === q.a) bySubj[q.s].c++; });
+  var st = el("table", {}, [el("tr", {}, [el("th", {text:"Subject"}), el("th", {text:"Score"})])]);
+  SUBJ.forEach(function(s){ if (bySubj[s]) st.appendChild(el("tr", {}, [el("td", {text:s}), el("td", {class:"num", text:bySubj[s].c + " / " + bySubj[s].n})])); });
+  head.appendChild(st);
+  var wrongIds = wrong.map(function(w){ return w.q.id; });
+  head.appendChild(el("div", {class:"btns"}, [
+    wrongIds.length ? el("button", {class:"b", text:"Retry the " + wrongIds.length + " I missed", onclick:function(){ begin({title:"Retry · " + title.replace(/^Retry · /, ""), ids:wrongIds, limit:0, bestKey:null}); }}) : null,
+    el("button", {class:"b alt", text:"Home", onclick:home})
+  ]));
+  app.appendChild(head);
+
+  var tb = el("table", {}, [el("tr", {}, [el("th", {text:"Topic"}), el("th", {text:"Score"})])]);
+  order.sort(function(x, y){ return rows[x].c / rows[x].n - rows[y].c / rows[y].n; });
+  order.forEach(function(k){ tb.appendChild(el("tr", {}, [el("td", {text:k}), el("td", {class:"num", text:rows[k].c + " / " + rows[k].n})])); });
+  app.appendChild(el("div", {class:"card"}, [el("b", {text:"Score by topic (weakest first)"}), tb]));
+
+  if (wrong.length){
+    var rv = el("div", {class:"card"}, [el("b", {text:"Questions to review"})]);
+    wrong.forEach(function(w){
+      var q = w.q, skipped = w.a == null || w.a < 0;
+      rv.appendChild(el("div", {class:"rev" + (skipped ? " skip" : "")}, [
+        el("div", {text:q.q}),
+        el("div", {class:"y", text: skipped ? "Not answered" : "Your answer: " + "ABCD"[w.a] + ") " + q.o[w.a]}),
+        el("div", {class:"c", text:"Correct: " + "ABCD"[q.a] + ") " + q.o[q.a]}),
+        el("div", {class:"sub", text:q.e})
+      ]));
+    });
+    app.appendChild(rv);
+  }
+  S = null; window.scrollTo(0, 0);
+}
+
+/* ---------- Global events ---------- */
+homeBtn.addEventListener("click", function(){ if (S) save(); home(); });
+document.addEventListener("keydown", function(e){
+  if (!S || e.ctrlKey || e.metaKey || e.altKey) return;
+  var k = e.key.toLowerCase(), i = "abcd".indexOf(k); if (i < 0) i = "1234".indexOf(k);
+  if (i >= 0 && k.length === 1){ answer(i); }
+  else if (e.key === "Enter"){ var n = document.getElementById("next"); if (n){ e.preventDefault(); n.click(); } }
+});
+home();
+})();
+</script>
+</body>
+</html>
